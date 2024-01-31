@@ -10,8 +10,61 @@ const server  = http.createServer((req,res)=>{
     if(req.url == '/jokes' && req.method == 'GET'){
         getAllJokes(req,res);
     }
+    if(req.url == '/jokes' && req.method == 'POST'){
+        addJoke(req,res);
+    }
 });
 server.listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function addJoke(req, res){
+    let data = '';
+    req.on('data',function(chunk){
+        data += chunk; 
+    });
+    req.on('end',function(){
+        let joke = JSON.parse(joke);
+        joke.likes = 0;
+        joke.dislikes = 0;
+        let dir = fs.readdirSync(dataPath);
+        let fileName = dir.length+'.json';
+        let filePath = path.join(dataPath,fileName);
+        fs.writeFileSync(filePath,JSON.stringify(joke));
+        res.end();
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function getAllJokes(req,res){
