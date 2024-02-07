@@ -27,10 +27,15 @@ const server = http.createServer((req, res)=>{
 server.listen(3000);
 
 function getOneJoke(id,res){
-    let file = fs.readFileSync(path.join(dataPath, id+'.json'));
-    let jokeJson = Buffer.from(file).toString();
-    let joke = JSON.parse(jokeJson);
-    res.end(JSON.stringify(joke));
+    let dir = fs.readdirSync(dataPath);
+    if(id > dir.length){
+        res.end("аы, шутки нету(");
+    }else{
+        let file = fs.readFileSync(path.join(dataPath, id+'.json'));
+        let jokeJson = Buffer.from(file).toString();
+        let joke = JSON.parse(jokeJson);
+        res.end(JSON.stringify(joke));
+    }
 }
 
 
