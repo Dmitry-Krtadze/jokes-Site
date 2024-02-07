@@ -3,9 +3,9 @@ const fs = require("fs");
 const path = require('path');
 const url = require('url');
 
-
 const dataPath = path.join(__dirname, 'data');
 
+const querystring = require('querystring');
 
 const server = http.createServer((req, res)=>{
     if(req.url == '/jokes' && req.method == 'GET')
@@ -16,8 +16,23 @@ const server = http.createServer((req, res)=>{
     {
         addJokes(req,res);
     }
+    const urlParts = url.parse(req.url, true);
+    const queryParams = urlParts.query;
+    const jokeNumber = parseInt(queryParams.joke, 10); 
+    
+    if(req.url == `/jokes?joke=${jokeNumber}` && req.method == 'GET'){
+        getOneJoke(jokeNumber,res);
+    }
 });
 server.listen(3000);
+
+function getOneJoke(id,res){
+    let file = fs.readFileSync(path.join(dataPath, id+'.json'));
+    let jokeJson = Buffer.from(file).toString();
+    let joke = JSON.parse(jokeJson);
+    res.end(JSON.stringify(joke));
+}
+
 
 function addJokes(req,res)
 {
