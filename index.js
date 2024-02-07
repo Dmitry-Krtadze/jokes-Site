@@ -2,6 +2,8 @@ const http = require("http");
 const fs = require("fs");
 const path = require('path');
 const url = require('url');
+
+
 const dataPath = path.join(__dirname, 'data');
 
 
@@ -20,16 +22,16 @@ server.listen(3000);
 function addJokes(req,res)
 {
     let data = '';
-    req.on('data', function(){
-        data += EncodedVideoChunk;
+    req.on('data', function(chunk){
+        data += chunk;
     });
     req.on('end', function(){
-        let joke = JSON.parse(joke);
+        let joke = JSON.parse(data);
         joke.likes = 0;
         joke.dislikes = 0;
         let dir = fs.readdirSync(dataPath);
         let fileName = dir.length+'.json';
-        let filePath = path.join(dataPath.fileName);
+        let filePath = path.join(dataPath,fileName);
         fs.writeFileSync(filePath,JSON.stringify(joke));
         res.end();
     });
